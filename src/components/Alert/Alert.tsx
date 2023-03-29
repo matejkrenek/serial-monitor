@@ -50,11 +50,11 @@ const Alert: React.FC<AlertProps> = ({ type = 'error', text, className }) => {
     return isVisible ? (
         ReactDOM.createPortal(
             <div
-                className={`rounded-lg px-6 py-3 flex items-center justify-between max-w-2xl mx-auto ${wrapperClassName()} ${className}`}
+                className={`rounded-lg px-4 py-2 flex items-center justify-between max-w-2xl mx-auto ${wrapperClassName()} ${className}`}
             >
                 <div className="flex items-center">
                     {icon()}
-                    <p className="text-base">{text}</p>
+                    <p className="text-sm">{text}</p>
                 </div>
                 <div>
                     <button

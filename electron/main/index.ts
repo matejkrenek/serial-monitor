@@ -1,6 +1,7 @@
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow, ipcMain } from 'electron'
 import { release } from 'node:os'
 import { join } from 'node:path'
+import { SerialPort } from 'serialport'
 
 process.env.DIST_ELECTRON = join(__dirname, '../')
 process.env.DIST = join(process.env.DIST_ELECTRON, '../dist')
@@ -36,11 +37,8 @@ async function createWindow() {
         icon: join(process.env.PUBLIC, 'favicon.ico'),
         webPreferences: {
             preload,
-            // Warning: Enable nodeIntegration and disable contextIsolation is not secure in production
-            // Consider using contextBridge.exposeInMainWorld
-            // Read more on https://www.electronjs.org/docs/latest/tutorial/context-isolation
             nodeIntegration: true,
-            contextIsolation: false,
+            contextIsolation: true,
         },
     })
 
@@ -57,9 +55,16 @@ async function createWindow() {
     win.webContents.on('did-finish-load', () => {
         win?.webContents.send('main-process-message', new Date().toLocaleString())
     })
+
+    win.setMenu(null)
 }
 
-app.whenReady().then(createWindow)
+app.whenReady().then(() => {
+    ipcMain.handle('monitor:get_ports', async () => {
+        return await SerialPort.list()
+    })
+    createWindow()
+})
 
 app.on('window-all-closed', () => {
     win = null
