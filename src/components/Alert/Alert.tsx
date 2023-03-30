@@ -9,6 +9,8 @@ interface AlertProps {
 }
 
 const Alert: React.FC<AlertProps> = ({ type = 'error', text, className }) => {
+    const [isVisible, setIsVisible] = useState(true)
+
     const wrapperClassName = () => {
         if (type === 'error') {
             return 'bg-red-500 text-white'
@@ -45,24 +47,29 @@ const Alert: React.FC<AlertProps> = ({ type = 'error', text, className }) => {
         }
     }
 
-    return ReactDOM.createPortal(
-        <div
-            className={`rounded-lg px-6 py-3 flex items-center justify-between max-w-2xl mx-auto ${wrapperClassName()} ${className}`}
-        >
-            <div className="flex items-center">
-                {icon()}
-                <p className="text-base">{text}</p>
-            </div>
-            <div>
-                <button
-                    className={`rounded-md px-2 py-1 text-xs uppercase font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 ${buttonClassName()}`}
-                >
-                    close
-                </button>
-            </div>
-        </div>,
-        document.getElementById('portal') as HTMLElement
+    return isVisible ? (
+        ReactDOM.createPortal(
+            <div
+                className={`rounded-lg px-4 py-2 flex items-center justify-between max-w-2xl mx-auto ${wrapperClassName()} ${className}`}
+            >
+                <div className="flex items-center">
+                    {icon()}
+                    <p className="text-sm">{text}</p>
+                </div>
+                <div>
+                    <button
+                        onClick={() => setIsVisible(false)}
+                        className={`rounded-md px-2 py-1 text-xs uppercase font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 ${buttonClassName()}`}
+                    >
+                        close
+                    </button>
+                </div>
+            </div>,
+            document.getElementById('portal') as HTMLElement
+        )
+    ) : (
+        <></>
     )
 }
 
-export default Alert
+export default React.memo(Alert)
