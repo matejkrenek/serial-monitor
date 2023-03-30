@@ -1,6 +1,6 @@
 declare global {
     interface Window {
-        monitor: any
+        monitor: { ports: any; onUpdatePorts: any }
     }
 }
 

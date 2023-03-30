@@ -18,4 +18,4 @@ const Chart: React.FC<ChartProps> = ({ head, data }) => {
     return <canvas ref={canvas}></canvas>
 }
 
-export default Chart
+export default React.memo(Chart)

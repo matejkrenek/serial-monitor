@@ -36,7 +36,7 @@ export default class ChartService {
 
         this.head.forEach((x, i) => {
             this.ctx.beginPath()
-            this.ctx.fillStyle = this.colors[i - 1]
+            this.ctx.fillStyle = this.colors[i]
             this.ctx.arc(left, top, 5, 0, 2 * Math.PI)
             this.ctx.fill()
 
@@ -58,44 +58,44 @@ export default class ChartService {
 
     private renderData() {
         const padding = 26
-        const step = this.getStepValue()
+
         const max = this.getMaxValue()
         const min = this.getMinValue()
-        const range = max - min
+        const range = max - min === 0 ? max + min : max - min
+        const steps = this.getStepsNumber() - 1
         const height = this.canvas.height - 3 * padding
+        const width = this.canvas.width - 3 * padding
 
-        this.ctx.lineWidth = 2
-        this.ctx.lineCap = 'round'
+        this.data.map((data, dataIndex) => {
+            data.map((value, valueIndex) => {
+                this.ctx.lineWidth = 2
+                this.ctx.lineCap = 'round'
 
-        let previous: number[] = []
-
-        for (let i = 0; i < this.data.length; i++) {
-            const values = this.data[i]
-
-            if (i > 0) {
-                values.forEach((v, j) => {
-                    const h1 = (height / range) * (previous[j] - min)
-                    const x1 = padding + (i - 1) * step
-                    const y1 = this.canvas.height - padding - h1
-
-                    const h2 = (height / range) * (v - min)
-                    const x2 = padding + i * step
-                    const y2 = this.canvas.height - padding - h2
-
-                    this.ctx.strokeStyle = this.colors[j - 1]
-                    this.ctx.beginPath()
-                    this.ctx.moveTo(x1, y1)
-                    this.ctx.lineTo(x2, y2)
-                    this.ctx.stroke()
-                })
-            }
-
-            previous = values
-        }
+                this.ctx.strokeStyle = this.colors[dataIndex]
+                this.ctx.beginPath()
+                this.ctx.moveTo(
+                    padding + (width / steps) * valueIndex,
+                    this.canvas.height - padding - (height / range) * value
+                )
+                if (valueIndex + 1 !== data.length) {
+                    this.ctx.lineTo(
+                        padding + (width / steps) * (valueIndex + 1),
+                        this.canvas.height - padding - (height / range) * data[valueIndex + 1]
+                    )
+                }
+                this.ctx.stroke()
+            })
+        })
     }
 
-    private getStepValue() {
-        return Math.min(20, (this.canvas.width - 2 * 26) / this.data.length)
+    private getStepsNumber() {
+        let length: number = 0
+
+        this.data.map((record) =>
+            record.length > length ? (length = record.length) : (length = length)
+        )
+
+        return length
     }
 
     private getFlattenData(): number[] {

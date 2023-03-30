@@ -3,6 +3,9 @@ import { Alert, Button, Chart, Input, Select, Tab, Table, Tabs } from './compone
 
 const App: React.FC = () => {
     const [ports, setPorts] = React.useState([])
+    const [alerts, setAlerts] = React.useState<
+        { type: 'info' | 'error' | 'success' | 'warning'; text: string }[]
+    >([])
     const [baudrates, setBaudrates] = React.useState([
         {
             value: '300',
@@ -33,32 +36,44 @@ const App: React.FC = () => {
             label: '14400',
         },
     ])
+    const [temp, setTemp] = React.useState([0, 3, 23])
+
     React.useEffect(() => {
-        window?.monitor.ports().then((ports: any) =>
+        window.monitor.onUpdatePorts((_event: any, value: any) => {
             setPorts(
-                ports.map((port: any) => {
+                value.map((port: any) => {
                     return { label: port.path, value: port.path }
                 })
             )
-        )
+        })
+        let timer = setInterval(() => {
+            setTemp((prevState) => [...prevState, Math.floor(Math.random() * 22)])
+        }, 1000)
+
+        return () => clearInterval(timer)
     }, [])
+
+    React.useEffect(() => {
+        setAlerts((prevState) => [
+            ...prevState,
+            {
+                type: 'info',
+                text: 'New ports were connected',
+            },
+        ])
+    }, [ports])
 
     return (
         <div className="bg-gray-100 h-full flex flex-col relative">
-            <header className="bg-teal-400 px-4 py-3">
-                <div className="flex items-center justify-between">
-                    <div className="flex items-center -mx-1 w-full">
-                        <Input className="mx-1" placeholder="Message" />
-                        <Button className="mx-1">Send</Button>
-                        <Select className="mx-1 w-64" options={ports} />
-                        <Select className="mx-1 w-64" options={baudrates} />
-                        <Button className="mx-1">Connect</Button>
-                        <Button className="mx-1" color="secondary">
-                            Disconnect
-                        </Button>
+            <header className="bg-teal-400 px-2 py-4">
+                <div className="">
+                    <div className="flex items-center w-full">
+                        <Input className="mx-2 min-w-[12rem]" placeholder="Message" />
+                        <Button className="mx-2 min-w-[6rem]">Send</Button>
                     </div>
                 </div>
             </header>
+
             <Tabs
                 value={0}
                 className="flex-grow"
@@ -90,29 +105,38 @@ const App: React.FC = () => {
                     </ul>
                 </Tab>
                 <Tab index={1} className="h-full">
-                    <Chart
-                        head={['temperaterue', 'sdfdsf', 'fsdf']}
-                        data={[
-                            [1, 2, 3, 4, 5, 6],
-                            [3, 4, 1],
-                            [4, 4, 1, 8, 6, 8, 8, 8],
-                        ]}
-                    />
+                    <Chart head={['temperaterue', '34']} data={[temp]} />
                 </Tab>
                 <Tab index={2}>
                     <Table
                         head={['time', 'humidity', 'temperature', 'dewPoint']}
-                        rows={[['1085', '25', '28', '6.16']]}
+                        rows={[
+                            ['1085', '25', '28', '6.16'],
+                            ['1085', '25', '28', '6.16'],
+                            ['1085', '25', '28', '6.16'],
+                            ['1085', '25', '28', '6.16'],
+                            ['1085', '25', '28', '6.16'],
+                            ['1085', '25', '28', '6.16'],
+                        ]}
                         className="w-full"
                     />
                 </Tab>
             </Tabs>
-
-            <Alert
-                type="error"
-                text="Sorry, something went wrong please try again."
-                className="my-4"
-            />
+            <footer className="bg-teal-400 px-2 py-4">
+                <div className="flex items-center w-full justify-end">
+                    <div className="flex items-center">
+                        <Select className="mx-2 min-w-[8rem] max-w-[12rem]" options={ports} />
+                        <Select className="mx-2 min-w-[8rem] max-w-[12rem]" options={baudrates} />
+                        <Button className="mx-2 min-w-[6rem]">Connect</Button>
+                        <Button className="mx-2 min-w-[6rem]" color="secondary">
+                            Disconnect
+                        </Button>
+                    </div>
+                </div>
+            </footer>
+            {alerts.map((alert, index) => (
+                <Alert type={alert.type} key={index} text={alert.text} className="my-4" />
+            ))}
         </div>
     )
 }

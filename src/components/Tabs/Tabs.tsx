@@ -23,7 +23,7 @@ const Tabs: React.FC<TabsProps> = ({ value = 0, handlers, className, children })
 
     return (
         <TabsContext.Provider value={{ active: active }}>
-            <div className={`flex flex-col relative ${className}`}>
+            <div className={`flex flex-col relative overflow-hidden ${className}`}>
                 <div className="flex items-center bg-white px-4 py-2 border-b-2 border-teal-700">
                     <div className=" -mx-1">
                         {handlers.map((handler, index) => (
@@ -41,7 +41,7 @@ const Tabs: React.FC<TabsProps> = ({ value = 0, handlers, className, children })
                         ))}
                     </div>
                 </div>
-                <div className="bg-white p-4 flex-grow">{children}</div>
+                <div className="bg-white p-4 flex-grow overflow-auto">{children}</div>
             </div>
         </TabsContext.Provider>
     )

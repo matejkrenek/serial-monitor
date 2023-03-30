@@ -11,6 +11,14 @@ interface AlertProps {
 const Alert: React.FC<AlertProps> = ({ type = 'error', text, className }) => {
     const [isVisible, setIsVisible] = useState(true)
 
+    React.useEffect(() => {
+        const timer = setTimeout(() => {
+            setIsVisible(false)
+        }, 3000)
+
+        return () => clearTimeout(timer)
+    }, [])
+
     const wrapperClassName = () => {
         if (type === 'error') {
             return 'bg-red-500 text-white'
@@ -50,7 +58,7 @@ const Alert: React.FC<AlertProps> = ({ type = 'error', text, className }) => {
     return isVisible ? (
         ReactDOM.createPortal(
             <div
-                className={`rounded-lg px-4 py-2 flex items-center justify-between max-w-2xl mx-auto ${wrapperClassName()} ${className}`}
+                className={`rounded-lg px-4 py-2 flex items-center justify-between max-w-2xl mx-auto animate-fade_up bg-opacity-90 ${wrapperClassName()} ${className}`}
             >
                 <div className="flex items-center">
                     {icon()}
