@@ -89,7 +89,7 @@ const App: React.FC = () => {
                         ))}
                     </ul>
                 </Tab>
-                <Tab index={1}></Tab>
+                <Tab index={1}>sdfsd</Tab>
                 <Tab index={2}>
                     <table className=" w-6/12">
                         <thead className="border-b-2 border-teal-500 text-teal-500 text-sm">
