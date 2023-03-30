@@ -26,9 +26,10 @@ const Tabs: React.FC<TabsProps> = ({ value = 0, handlers, className, children })
             <div className={`flex flex-col relative ${className}`}>
                 <div className="flex items-center bg-white px-4 py-2 border-b-2 border-teal-700">
                     <div className=" -mx-1">
-                        {handlers.map((handler) => (
+                        {handlers.map((handler, index) => (
                             <button
                                 type="button"
+                                key={index}
                                 className={`rounded-md cursor-pointer border border-white px-2 py-2 h-8 mx-1 text-xs font-semibold hover:text-teal-700 focus:outline-teal-700 ${
                                     active === handler.value &&
                                     'text-white hover:text-white bg-teal-700 border-teal-700'

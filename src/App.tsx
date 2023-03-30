@@ -1,5 +1,5 @@
 import React from 'react'
-import { Alert, Button, Input, Select, Tab, Tabs } from './components'
+import { Alert, Button, Chart, Input, Select, Tab, Table, Tabs } from './components'
 
 const App: React.FC = () => {
     const [ports, setPorts] = React.useState([])
@@ -49,9 +49,9 @@ const App: React.FC = () => {
                 <div className="flex items-center justify-between">
                     <div className="flex items-center -mx-1 w-full">
                         <Input className="mx-1" placeholder="Message" />
-                        <Select className="mx-1 w-32" options={ports} />
-                        <Select className="mx-1 w-32" options={baudrates} />
                         <Button className="mx-1">Send</Button>
+                        <Select className="mx-1 w-64" options={ports} />
+                        <Select className="mx-1 w-64" options={baudrates} />
                         <Button className="mx-1">Connect</Button>
                         <Button className="mx-1" color="secondary">
                             Disconnect
@@ -89,28 +89,22 @@ const App: React.FC = () => {
                         ))}
                     </ul>
                 </Tab>
-                <Tab index={1}></Tab>
+                <Tab index={1} className="h-full">
+                    <Chart
+                        head={['temperaterue', 'sdfdsf', 'fsdf']}
+                        data={[
+                            [1, 2, 3, 4, 5, 6],
+                            [3, 4, 1],
+                            [4, 4, 1, 8, 6, 8, 8, 8],
+                        ]}
+                    />
+                </Tab>
                 <Tab index={2}>
-                    <table className=" w-6/12">
-                        <thead className="border-b-2 border-teal-500 text-teal-500 text-sm">
-                            <tr>
-                                <th className="text-start py-2 px-2">time</th>
-                                <th className="text-start py-2 px-2">humidity</th>
-                                <th className="text-start py-2 px-2">temperature</th>
-                                <th className="text-start py-2 px-2">dewPoint</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {Array.from(Array(100).keys()).map((num) => (
-                                <tr key={num} className=" text-sm ">
-                                    <td className="py-2 px-2">1085</td>
-                                    <td className="py-2 px-2">25</td>
-                                    <td className="py-2 px-2">28</td>
-                                    <td className="py-2 px-2">6.16</td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                    <Table
+                        head={['time', 'humidity', 'temperature', 'dewPoint']}
+                        rows={[['1085', '25', '28', '6.16']]}
+                        className="w-full"
+                    />
                 </Tab>
             </Tabs>
 
