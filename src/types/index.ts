@@ -1,6 +1,14 @@
 declare global {
     interface Window {
-        monitor: { ports: any; onUpdatePorts: any }
+        monitor: {
+            connect: any
+            disconnect: any
+            refreshPorts: any
+            refreshBaudRates: any
+            onPorts: any
+            onError: any
+            onBaudRates: any
+        }
     }
 }
 

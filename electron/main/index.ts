@@ -1,78 +1,35 @@
-import { app, BrowserWindow } from 'electron'
 import path from 'node:path'
-import { SerialPort } from 'serialport'
+import BaseApp from './BaseApp'
+import { SerialCommunication } from './SerialCommunication'
+import { ipcMain } from 'electron'
 
-process.env.DIST_ELECTRON = path.join(__dirname, '../')
-process.env.DIST = path.join(process.env.DIST_ELECTRON, '../dist')
-process.env.PUBLIC = process.env.VITE_DEV_SERVER_URL
-    ? path.join(process.env.DIST_ELECTRON, '../public')
-    : process.env.DIST
+class App extends BaseApp {
+    private serial: SerialCommunication
 
-let prev_ports = []
-let ports = []
+    protected async process() {
+        this.serial = new SerialCommunication()
 
-class App {
-    private window: BrowserWindow
-    private title: string
-    private icon: string
-    private index: string
-    private preload: string
-
-    constructor(title: string, icon: string, index: string, preload: string) {
-        this.title = title
-        this.icon = icon
-        this.index = index
-        this.preload = preload
-    }
-
-    public init() {
-        app.on('ready', () => this.createWindow())
-        app.on('window-all-closed', () => this.onWindowAllClosed())
-        app.on('activate', () => this.onActive())
-    }
-
-    private createWindow() {
-        this.window = new BrowserWindow({
-            title: this.title,
-            icon: this.icon,
-            webPreferences: {
-                preload: this.preload,
-                nodeIntegration: true,
-                contextIsolation: true,
-            },
+        ipcMain.on('monitor:connect', async (channel, data) => {
+            this.serial.open(
+                {
+                    port: data.port,
+                    baudRate: parseInt(data.baudrate),
+                },
+                channel
+            )
         })
 
-        setInterval(async () => {
-            ports = await SerialPort.list()
-
-            if (prev_ports.length !== ports.length) {
-                this.window.webContents.send('monitor:update_ports', ports)
-            }
-
-            prev_ports = ports
-        }, 1000)
-
-        if (process.env.VITE_DEV_SERVER_URL) {
-            this.window.loadURL(process.env.VITE_DEV_SERVER_URL)
-            this.window.webContents.openDevTools()
-        } else {
-            this.window.loadFile(this.index)
-        }
-        this.window.webContents.on('did-finish-load', () => {
-            this.window?.webContents.send('main-process-message', new Date().toLocaleString())
+        ipcMain.on('monitor:disconnect', async (channel, data) => {
+            channel.reply('monitor:ports', await this.serial.ports())
         })
 
-        this.window.setMenu(null)
-    }
+        ipcMain.on('monitor:refresh_ports', async (channel, data) => {
+            channel.reply('monitor:ports', await this.serial.ports())
+        })
 
-    private onActive() {
-        if (!this.window) this.createWindow()
-    }
-
-    private onWindowAllClosed() {
-        if (process.platform !== 'darwin') {
-            app.quit()
-        }
+        ipcMain.on('monitor:refresh_baud_rates', async (channel, data) => {
+            channel.reply('monitor:baud_rates', this.serial.baudRates())
+        })
     }
 }
 

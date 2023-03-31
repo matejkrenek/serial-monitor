@@ -6,62 +6,37 @@ const App: React.FC = () => {
     const [alerts, setAlerts] = React.useState<
         { type: 'info' | 'error' | 'success' | 'warning'; text: string }[]
     >([])
-    const [baudrates, setBaudrates] = React.useState([
-        {
-            value: '300',
-            label: '300',
-        },
-        {
-            value: '600',
-            label: '600',
-        },
-        {
-            value: '900',
-            label: '900',
-        },
-        {
-            value: '1200',
-            label: '1200',
-        },
-        {
-            value: '2400',
-            label: '2400',
-        },
-        {
-            value: '4800',
-            label: '4800',
-        },
-        {
-            value: '14400',
-            label: '14400',
-        },
-    ])
-    const [temp, setTemp] = React.useState([0, 3, 23])
+    const [baudrates, setBaudrates] = React.useState([])
+    const [port, setPort] = React.useState<string>()
+    const [baudrate, setBaudrate] = React.useState<string>()
 
     React.useEffect(() => {
-        window.monitor.onUpdatePorts((_event: any, value: any) => {
+        window.monitor.onPorts((_: any, data: any) => {
             setPorts(
-                value.map((port: any) => {
-                    return { label: port.path, value: port.path }
-                })
+                data.map((port: any) => ({
+                    value: port.path,
+                    label: port.path,
+                }))
+            )
+            setAlerts((prevState) => [
+                ...prevState,
+                {
+                    type: 'info',
+                    text: 'Ports were updated',
+                },
+            ])
+        })
+        window.monitor.onBaudRates((_: any, data: any) => {
+            setBaudrates(
+                data.map((baudRate: any) => ({
+                    value: baudRate,
+                    label: baudRate,
+                }))
             )
         })
-        let timer = setInterval(() => {
-            setTemp((prevState) => [...prevState, Math.floor(Math.random() * 22)])
-        }, 1000)
-
-        return () => clearInterval(timer)
+        window.monitor.refreshPorts()
+        window.monitor.refreshBaudRates()
     }, [])
-
-    React.useEffect(() => {
-        setAlerts((prevState) => [
-            ...prevState,
-            {
-                type: 'info',
-                text: 'New ports were connected',
-            },
-        ])
-    }, [ports])
 
     return (
         <div className="bg-gray-100 h-full flex flex-col relative">
@@ -105,7 +80,7 @@ const App: React.FC = () => {
                     </ul>
                 </Tab>
                 <Tab index={1} className="h-full">
-                    <Chart head={['temperaterue', '34']} data={[temp]} />
+                    <Chart head={['temperaterue', '34']} data={[]} />
                 </Tab>
                 <Tab index={2}>
                     <Table
@@ -125,9 +100,33 @@ const App: React.FC = () => {
             <footer className="bg-teal-400 px-2 py-4">
                 <div className="flex items-center w-full justify-end">
                     <div className="flex items-center">
-                        <Select className="mx-2 min-w-[8rem] max-w-[12rem]" options={ports} />
-                        <Select className="mx-2 min-w-[8rem] max-w-[12rem]" options={baudrates} />
-                        <Button className="mx-2 min-w-[6rem]">Connect</Button>
+                        <Select
+                            className="mx-2 min-w-[8rem] max-w-[12rem]"
+                            value={port}
+                            onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                                setPort(e.target.value)
+                            }
+                            options={ports}
+                        />
+                        <Select
+                            className="mx-2 min-w-[8rem] max-w-[12rem]"
+                            value={baudrate}
+                            onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                                setBaudrate(e.target.value)
+                            }
+                            options={baudrates}
+                        />
+                        <Button
+                            className="mx-2 min-w-[6rem]"
+                            onClick={() =>
+                                window.monitor.connect({
+                                    port,
+                                    baudrate,
+                                })
+                            }
+                        >
+                            Connect
+                        </Button>
                         <Button className="mx-2 min-w-[6rem]" color="secondary">
                             Disconnect
                         </Button>
@@ -141,4 +140,4 @@ const App: React.FC = () => {
     )
 }
 
-export default App
+export default React.memo(App)
