@@ -14,14 +14,16 @@
   </p>
 </a>
 <div align="center">
-  <h2 align="center">STM8 Toolchain</h2>
+  <h2 align="center">Serial monitor</h2>
 
   <p align="center">
-    Easy to use toolchain for building applications with STM8
+    Easy to use serial monitor with fancy features like writing data into charts or tables
     <br />
     <a href="https://github.com/matejkrenek/stm8-toolchain/issues">Report Bug</a>
     ·
     <a href="https://github.com/matejkrenek/stm8-toolchain/issues">Request Feature</a>
+    ·
+    <a href="https://github.com/matejkrenek/serial-monitor/releases/download/1.0.0/Serial.monitor-Windows-1.0.0-Setup.exe">Download</a>
   </p>
 </div>
 
