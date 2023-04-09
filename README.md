@@ -175,6 +175,6 @@ The idea of the serial monitor with tabs and partially the appearance of the app
 - [Electron-Serial-Port-Monitor](https://github.com/itterheim/Electron-Serial-Port-Monitor)
 
 I was struggling with proper implementation of react-electron-typescript stack and publishing the application. This github repo helped a lot in this area:
-- [electron-vite-react](https://github.com/matejkrenek/electron-vite-react)
+- [electron-vite-react](https://github.com/electron-vite/electron-vite-react)
 
 <p align="right">(<a href="#readme-top">Back to top</a>)</p>
