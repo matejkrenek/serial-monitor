@@ -161,18 +161,19 @@ Now when all necessary tools are downloaded you can run the toolchain on your ma
 
 Matěj Křenek - [mate23.krenek@gmail.com](mailto:mate23.krenek@gmail.com)
 
-Project Link: [https://github.com/matejkrenek/stm8-toolchain](https://github.com/matejkrenek/stm8-toolchain)
+Project Link: [https://github.com/matejkrenek/serial-monitor](https://github.com/matejkrenek/serial-monitor)
 
 <!-- LIMITATIONS -->
 ## Limitations
 
-- You have to run make file commands in git bash 😥
+Sometimes, when you write several messages in a row to the serial monitor, they may overlap and thus the serial monitor will evaluate them poorly, especially in the case of sending commands. Because of this, it is necessary to pay attention to a sufficient time delay between writing to the serial monitor.
 
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
 
-Apart from this toolchain I recommend any of these:
-* [Wykys stm8 tools](https://gitlab.com/wykys/stm8-tools)
-* [Marrek Nozka](https://github.com/spseol/STM8-deroboard-start)
+The idea of the serial monitor with tabs and partially the appearance of the application was stolen from this repo:
+- [Electron-Serial-Port-Monitor](https://github.com/itterheim/Electron-Serial-Port-Monitor)
+I was struggling with proper implementation of react-electron-typescript stack and publishing the application. This github repo helped a lot in this area:
+* [electron-vite-react](https://github.com/matejkrenek/electron-vite-react)
 
 <p align="right">(<a href="#readme-top">Back to top</a>)</p>
