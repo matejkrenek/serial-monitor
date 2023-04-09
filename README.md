@@ -8,7 +8,9 @@
 *** Thanks again! Now go create something AMAZING! :D
 -->
 
-<img src="https://github.com/matejkrenek/serial-monitor/blob/1.0.0/public/logo.svg" width="128" style="{margin: 0 auto}" />
+<a href="https://github.com/matejkrenek/serial-monitor" align="center">
+  <img src="https://github.com/matejkrenek/serial-monitor/blob/1.0.0/public/logo.svg" width="128" />
+</a>
 <div align="center">
   <h2 align="center">STM8 Toolchain</h2>
 
