@@ -31,9 +31,6 @@
 
 <!-- TABLE OF CONTENTS -->
 ### Table of contents
-  <li>
-    <a href="#about-the-serial-monitor">About The Toolchain</a>
-  </li>
   <li><a href="#application-preview">Application Preview</a></li>
   <li><a href="#tech-stack">Tech Stack</a></li>
   <li>
@@ -46,10 +43,6 @@
   <li><a href="#contact">Contact</a></li>
   <li><a href="#acknowledgments">Acknowledgments</a></li>
 
-
-
-<!-- ABOUT THE SERIAL MONITOR -->
-## About The Serial Monitor
 
 <!-- APPLICATION PREVIEW -->
 ## Application Preview
