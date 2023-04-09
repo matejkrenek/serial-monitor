@@ -62,7 +62,7 @@ const Alert: React.FC<AlertProps> = ({ type = 'error', text, className }) => {
             >
                 <div className="flex items-center">
                     {icon()}
-                    <p className="text-sm">{text}</p>
+                    <p className="text-sm" dangerouslySetInnerHTML={{ __html: text }}></p>
                 </div>
                 <div>
                     <button

@@ -7,10 +7,13 @@
     padding: 0;
     margin: 0;
     box-sizing: border-box;
+    letter-spacing: 0.1px;
 }
 
 #root {
     height: 100vh;
+    border-radius: 5px;
+    background-color: transparent;
 }
 
 #portal {
@@ -24,4 +27,17 @@
 
 #portal * {
     pointer-events: all;
+}
+
+.topbar {
+    -webkit-app-region: drag;
+}
+
+.toolbar-btn {
+    -webkit-app-region: no-drag;
+}
+
+body {
+    background-color: transparent;
+
 }

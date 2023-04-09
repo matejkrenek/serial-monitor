@@ -1,33 +1,63 @@
 import React from 'react'
 
 interface TableProps {
-    head: string[]
-    rows: string[][]
+    data: any
     className?: string
 }
 
-const Table: React.FC<TableProps> = ({ head = [], rows = [], className }) => {
+const Table: React.FC<TableProps> = ({ data, className }) => {
+    const [heads, setHeads] = React.useState([])
+    const [rows, setRows] = React.useState([])
+
+    const processData = () => {
+        let heads: any = []
+        let seq: any = []
+
+        data.forEach((chunk: any, index: number) => {
+            if (index === 0) {
+                heads = chunk.data.split(',')
+            } else {
+                seq.push(chunk.data.split(','))
+            }
+        })
+
+        setHeads(heads)
+        setRows(seq)
+    }
+
+    React.useEffect(() => {
+        processData()
+    }, [data])
+
     return (
-        <table className={`${className}`}>
-            <thead className="border-b-2 border-teal-500 text-teal-500 text-sm">
-                <tr>
-                    {head.map((record, index) => (
-                        <th className="text-start py-2 px-2">{record}</th>
-                    ))}
-                </tr>
-            </thead>
-            <tbody>
-                {rows.map((row, index) => (
-                    <tr key={index} className="text-sm">
-                        {row.map((record, index) => (
-                            <td key={index} className="py-2 px-2">
-                                {record}
-                            </td>
+        <div className={`${className}`}>
+            <div className="text-base whitespace-nowrap h-full">
+                <table className="w-full h-full">
+                    <thead className="sticky top-0 text-teal-500 text-sm">
+                        <tr>
+                            {heads.map((record: string, index: number) => (
+                                <th key={index}>
+                                    <div className="text-start py-2 px-2 border-b-2 border-teal-500 bg-white">
+                                        {record}
+                                    </div>
+                                </th>
+                            ))}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {rows.map((row: [], index: number) => (
+                            <tr key={index} className="text-sm">
+                                {row.map((record, index) => (
+                                    <td key={index} className="py-2 px-2">
+                                        {record}
+                                    </td>
+                                ))}
+                            </tr>
                         ))}
-                    </tr>
-                ))}
-            </tbody>
-        </table>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     )
 }
 

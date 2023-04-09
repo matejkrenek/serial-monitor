@@ -10,7 +10,16 @@ export default class ChartService {
         this.canvas = canvas
         this.canvas.width = this.canvas.parentElement?.clientWidth || window.innerWidth
         this.canvas.height = this.canvas.parentElement?.clientHeight || window.innerHeight
+        this.canvas.width = this.canvas.width - 24
         this.ctx = this.canvas?.getContext('2d') as CanvasRenderingContext2D
+
+        window.onresize = () => {
+            this.canvas.width = this.canvas.parentElement?.clientWidth || window.innerWidth
+            this.canvas.width = this.canvas.width - 24
+
+            this.canvas.height = this.canvas.parentElement?.clientHeight || window.innerHeight
+            this.render()
+        }
     }
 
     public clear() {
@@ -63,8 +72,8 @@ export default class ChartService {
         const min = this.getMinValue()
         const range = max - min === 0 ? max + min : max - min
         const steps = this.getStepsNumber() - 1
-        const height = this.canvas.height - 3 * padding
-        const width = this.canvas.width - 3 * padding
+        const height = this.canvas.height - 5 * padding
+        const width = this.canvas.width - 5 * padding
 
         this.data.map((data, dataIndex) => {
             data.map((value, valueIndex) => {
@@ -75,17 +84,31 @@ export default class ChartService {
                 this.ctx.beginPath()
                 this.ctx.moveTo(
                     padding + (width / steps) * valueIndex,
-                    this.canvas.height - padding - (height / range) * value
+                    this.canvas.height - padding - (height / range) * (value - min)
                 )
                 if (valueIndex + 1 !== data.length) {
                     this.ctx.lineTo(
                         padding + (width / steps) * (valueIndex + 1),
-                        this.canvas.height - padding - (height / range) * data[valueIndex + 1]
+                        this.canvas.height -
+                            padding -
+                            (height / range) * (data[valueIndex + 1] - min)
                     )
                 }
                 this.ctx.stroke()
             })
         })
+
+        this.ctx.beginPath()
+        this.ctx.fillStyle = '#000'
+        this.ctx.fillText(min.toString(), 0, this.canvas.height - padding - (height / range) * 0)
+
+        this.ctx.beginPath()
+        this.ctx.fillStyle = '#000'
+        this.ctx.fillText(
+            max.toString(),
+            0,
+            this.canvas.height - padding - (height / range) * (max - min)
+        )
     }
 
     private getStepsNumber() {

@@ -1,11 +1,4 @@
 import { app, BrowserWindow } from 'electron'
-import path from 'node:path'
-
-process.env.DIST_ELECTRON = path.join(__dirname, '../')
-process.env.DIST = path.join(process.env.DIST_ELECTRON, '../dist')
-process.env.PUBLIC = process.env.VITE_DEV_SERVER_URL
-    ? path.join(process.env.DIST_ELECTRON, '../public')
-    : process.env.DIST
 
 export default class BaseApp {
     protected window: BrowserWindow
@@ -31,10 +24,16 @@ export default class BaseApp {
         this.window = new BrowserWindow({
             title: this.title,
             icon: this.icon,
+            width: 900,
+            height: 600,
+            minWidth: 700,
+            minHeight: 400,
+            titleBarStyle: 'hidden',
             webPreferences: {
                 preload: this.preload,
                 nodeIntegration: true,
                 contextIsolation: true,
+                devTools: process.env.VITE_DEV_SERVER_URL && true,
             },
         })
 
