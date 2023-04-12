@@ -49,6 +49,11 @@
 
 <!-- TECH STACK -->
 ## Tech Stack
+Application is built with electron-react-typescript-tailwindcss stack.
+- Electron (for building desktop apps): [more about](https://www.electronjs.org)
+- React (for building UI): [more about](https://react.dev)
+- Typescript (for typed javascript): [more about](https://www.typescriptlang.org)
+- Tailwindcss (for styleing the UI): [more about](https://tailwindcss.com)
 
 <!-- USAGE -->
 ## Usage
