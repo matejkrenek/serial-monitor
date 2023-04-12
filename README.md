@@ -57,7 +57,7 @@ Application is built with <strong>electron-react-typescript-tailwindcss</strong>
 
 <!-- USAGE -->
 ## Usage
-In basic 
+I basic state monitor works as usuall serial monitor but in additian you can add a tabs with different names and types. 
 ### For SPL library of STM
 
 <!-- CONTACT -->
