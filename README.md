@@ -57,6 +57,7 @@ Application is built with <strong>electron-react-typescript-tailwindcss</strong>
 
 <!-- USAGE -->
 ## Usage
+In basic 
 ### For SPL library of STM
 
 <!-- CONTACT -->
